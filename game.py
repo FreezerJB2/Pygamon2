@@ -1,7 +1,6 @@
 import pygame
 import pytmx
 import pyscroll
-from win32api import GetSystemMetrics
 
 from player import Player
 
@@ -10,13 +9,10 @@ class Game:
 
     def __init__(self):
 
-        self.map = 'house'
-        self.mapOuest = 'world'
+        self.map = ['house', 'world']
 
         # creation de la fenêtre
-        screenWidth = GetSystemMetrics(0)
-        screenHeight = GetSystemMetrics(1)
-        self.screen = pygame.display.set_mode((screenWidth, screenHeight))
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         pygame.display.set_caption("Pygamon - Aventure")
 
         # charger la carte
@@ -66,44 +62,13 @@ class Game:
             self.player.change_animation('left')
 
 
-    def switch_house(self):
-
-        # charger la carte
-        tmxData = pytmx.util_pygame.load_pygame('house_blue.tmx')
-        mapData = pyscroll.data.TiledMapData(tmxData)
-        mapLayer = pyscroll.orthographic.BufferedRenderer(mapData, self.screen.get_size())
-        mapLayer.zoom = 6
-
-        # definir une liste qui va stocker les rectangles de collisions
-        self.walls = []
-
-        for obj in tmxData.objects:
-            if obj.type == 'collision':
-                self.walls.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
-
-        # dessiner le groupe de calque
-        self.group = pyscroll.PyscrollGroup(map_layer=mapLayer, default_layer=5)
-        self.group.add(self.player)
-
-        # definir le rectangle de collision pour entrer dans la maison
-        enter_house = tmxData.get_object_by_name('exit_house')
-        self.enter_house_rect = pygame.Rect(enter_house.x, enter_house.y, enter_house.width, enter_house.height)
-
-        # définir le point de spawn devant la maison
-        spawn_house_point = tmxData.get_object_by_name('spawn_house')
-        self.player.position[0] = spawn_house_point.x
-        self.player.position[1] = spawn_house_point.y - 20
-
-        self.map = 'world'
-
-
-    def charge_world(self, nameCarte, player, positionEntry, positionExit, map):
+    def charge_world(self, nameCarte, zoom, player, positionEntry, positionExit, map):
 
         # charger la carte
         tmxData = pytmx.util_pygame.load_pygame(nameCarte)
         mapData = pyscroll.data.TiledMapData(tmxData)
         mapLayer = pyscroll.orthographic.BufferedRenderer(mapData, self.screen.get_size())
-        mapLayer.zoom = 6
+        mapLayer.zoom = zoom
 
         # definir une liste qui va stocker les rectangles de collisions
         self.walls = []
@@ -133,21 +98,19 @@ class Game:
         self.group.update()
 
         # verifier l'entrer dans la maison
-        if self.player.feet.colliderect(self.enter_house_rect):
-            self.switch_house()
+        if self.map[0] == self.player.feet.colliderect(self.enter_house_rect):
+            self.charge_world('house.tmx', self.player, 'exit_house_blue', 'spawn_house_blue', 'world')
 
         # verifier la sortie dans la maison
-        #if self.player.feet.colliderect(self.enter_house_rect):
-            #self.charge_world()
+        if self.map[0] == self.player.feet.colliderect(self.enter_house_rect):
+            self.charge_world('carte.tmx', self.player, 'enter_house_blue', 'enter_house_exit', 'house')
 
-        if self.mapOuest == self.player.feet.colliderect(self.enter_world_rect):
-            self.charge_world('carte_Ouest.tmx', self.player, 'switch_world_middle_top', 'spawn_world_ouest_top', 'world')
+        if self.mapOuest[1] == self.player.feet.colliderect(self.enter_house_rect):
+            self.charge_world('carte_Ouest.tmx', self.player, 'switch_world_middle_top', 'spawn_world_ouest_top', 'carte')
             print('Changez monde')
 
-
-
-        if self.player.feet.colliderect(self.enter_world_rect):
-            self.switch_world_middle_ouest_top()
+        if self.map[1] == self.player.feet.colliderect(self.enter_house_rect):
+            self.charge_world('carte.tmx', self.player, 'switch_world_ouest_top', 'spawn_world_middle_ouest_top', 'carte_Ouest')
 
 
         # verification de la collision
