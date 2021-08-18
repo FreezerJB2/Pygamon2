@@ -87,6 +87,7 @@ class Game:
         self.player.position[1] = spawn_point.y + 20
 
         print('Position modifié')
+        #bababsas
 
         # dessiner le groupe de calque
         self.group = pyscroll.PyscrollGroup(map_layer=mapLayer, default_layer=5)
