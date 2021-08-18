@@ -66,7 +66,9 @@ class Game:
 
         # verifier l'entrer dans la maison
         if self.map == 'house' and self.player.feet.colliderect(self.enter_house_rect):
-            self.charge_world('house.tmx', 4, self.player, 'exit_house_blue', 'spawn_house_blue', 'world')
+           
+            self.charge_world.swap_world(self,'house_blue.tmx',4,self.player,'exit_house','spawn_house', map='world')
+
 
         # verifier la sortie dans la maison
         if self.map == 'world' and self.player.feet.colliderect(self.enter_house_rect):
