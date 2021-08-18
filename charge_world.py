@@ -2,9 +2,7 @@ import pygame
 import pyscroll
 import pytmx
 
-
-
-class Charge_word():
+class Charge_world():
 
     def swap_world(self, nameCarte, zoom, player, positionEntry, positionExit, map):
         # charger la carte
