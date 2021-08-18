@@ -105,7 +105,7 @@ class Game:
         if self.map[0] == self.player.feet.colliderect(self.enter_house_rect):
             self.charge_world('carte.tmx', self.player, 'enter_house_blue', 'enter_house_exit', 'house')
 
-        if self.mapOuest[1] == self.player.feet.colliderect(self.enter_house_rect):
+        if self.map[1] == self.player.feet.colliderect(self.enter_house_rect):
             self.charge_world('carte_Ouest.tmx', self.player, 'switch_world_middle_top', 'spawn_world_ouest_top', 'carte')
             print('Changez monde')
 
