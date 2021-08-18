@@ -99,18 +99,18 @@ class Game:
 
         # verifier l'entrer dans la maison
         if self.map[0] == self.player.feet.colliderect(self.enter_house_rect):
-            self.charge_world('house.tmx', self.player, 'exit_house_blue', 'spawn_house_blue', 'world')
+            self.charge_world('house.tmx', 4,self.player, 'exit_house_blue', 'spawn_house_blue', 'world')
 
         # verifier la sortie dans la maison
         if self.map[0] == self.player.feet.colliderect(self.enter_house_rect):
-            self.charge_world('carte.tmx', self.player, 'enter_house_blue', 'enter_house_exit', 'house')
+            self.charge_world('carte.tmx', 3.5,self.player, 'enter_house_blue', 'enter_house_exit', 'house')
 
         if self.map[1] == self.player.feet.colliderect(self.enter_house_rect):
-            self.charge_world('carte_Ouest.tmx', self.player, 'switch_world_middle_top', 'spawn_world_ouest_top', 'carte')
+            self.charge_world('carte_Ouest.tmx', 3.5,self.player, 'switch_world_middle_top', 'spawn_world_ouest_top', 'carte')
             print('Changez monde')
 
         if self.map[1] == self.player.feet.colliderect(self.enter_house_rect):
-            self.charge_world('carte.tmx', self.player, 'switch_world_ouest_top', 'spawn_world_middle_ouest_top', 'carte_Ouest')
+            self.charge_world('carte.tmx', 3.5,self.player, 'switch_world_ouest_top', 'spawn_world_middle_ouest_top', 'carte_Ouest')
 
 
         # verification de la collision
