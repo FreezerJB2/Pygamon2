@@ -2,22 +2,24 @@ import pygame
 import pytmx
 import pyscroll
 
+from inv import open_inv
 from player import Player
-from Charge_world import change_world
+from charge_world import Charge_world as swap
+
 
 
 class Game:
 
     def __init__(self):
 
-        self.map = 'house'
+        self.charge_world = swap
 
         # creation de la fenêtre
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         pygame.display.set_caption("Pygamon - Aventure")
 
         # charger la carte
-        self.map = 'world'
+        self.map = 'house'
         tmxData = pytmx.util_pygame.load_pygame('carte.tmx')
         mapData = pyscroll.data.TiledMapData(tmxData)
         mapLayer = pyscroll.orthographic.BufferedRenderer(mapData, self.screen.get_size())
@@ -50,35 +52,31 @@ class Game:
 
         if pressed[pygame.K_z]:
             self.player.move_up()
-            self.player.change_animation('up')
+            #self.player.change_animation('up')
         elif pressed[pygame.K_s]:
             self.player.move_down()
-            self.player.change_animation('down')
         elif pressed[pygame.K_d]:
             self.player.move_right()
-            self.player.change_animation('right')
+            #self.player.change_animation('right')
         elif pressed[pygame.K_q]:
             self.player.move_left()
-            self.player.change_animation('left')
+            #self.player.change_animation('left')
+
 
     def update(self):
         self.group.update()
 
         # verifier l'entrer dans la maison
         if self.map == 'house' and self.player.feet.colliderect(self.enter_house_rect):
-           
-            self.charge_world.swap_world(self,'house_blue.tmx',4,self.player,'exit_house','spawn_house', map='world')
-
+            self.charge_world.swap_world(self, 'house_blue.tmx', 4, self.player, 'exit_house_blue', 'spawn_house_blue', 'world')
 
         # verifier la sortie dans la maison
         if self.map == 'world' and self.player.feet.colliderect(self.enter_house_rect):
-            self.charge_world('carte.tmx', 3.5, self.player, 'enter_house_blue', 'enter_house_exit', 'house')
+            self.charge_world.swap_world(self, 'carte.tmx', 3.5, self.player, 'enter_house_blue', 'enter_house_exit', 'house')
 
-        if self.map == self.player.feet.colliderect(self.enter_house_rect):
-            self.charge_world('carte_Ouest.tmx', 3.5, self.player, 'switch_world_middle_top', 'spawn_world_ouest_top', 'world')
+        if self.map == 'carte_Ouest' and self.player.feet.colliderect(self.enter_house_rect):
+            self.charge_world.swap_world(self, 'carte_Ouest.tmx', 3.5, self.player, 'switch_world_middle_top', 'spawn_world_ouest_top', 'world')
             print('Changez monde')
-
-
 
         # verification de la collision
         for sprite in self.group.sprites():

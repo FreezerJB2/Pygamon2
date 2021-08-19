@@ -26,11 +26,10 @@ class Charge_world():
 
         # définir le point de spawn devant la maison
         spawn_point = tmxData.get_object_by_name(positionExit)
-        self.player.position[0] = spawn_point.x
+        self.player.position[0] = spawn_point.x - 20
         self.player.position[1] = spawn_point.y - 20
 
         print('Position modifié')
-        # bababsas
 
         # dessiner le groupe de calque
         self.group = pyscroll.PyscrollGroup(map_layer=mapLayer, default_layer=5)
